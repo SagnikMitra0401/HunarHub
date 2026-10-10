@@ -38,6 +38,8 @@ export default function ProductList() {
       <div className="row mb-3 g-2">
         <div className="col-md-4">
           <select
+            id="product-category"
+            name="category"
             className="form-select"
             value={filters.category}
             onChange={(e) => setFilters({ ...filters, category: e.target.value })}
@@ -50,6 +52,8 @@ export default function ProductList() {
         </div>
         <div className="col-md-3">
           <input
+            id="product-min-price"
+            name="minPrice"
             className="form-control"
             type="number"
             placeholder="Min price"
@@ -59,6 +63,8 @@ export default function ProductList() {
         </div>
         <div className="col-md-3">
           <input
+            id="product-max-price"
+            name="maxPrice"
             className="form-control"
             type="number"
             placeholder="Max price"

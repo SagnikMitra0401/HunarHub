@@ -150,8 +150,10 @@ export default function EntrepreneurDashboard() {
           <h4>Edit Profile & Availability</h4>
           <form onSubmit={saveProfile}>
             <div className="mb-2">
-              <label className="form-label">Category</label>
+              <label htmlFor="profile-category" className="form-label">Category</label>
               <select
+                id="profile-category"
+                name="categoryId"
                 className="form-select"
                 value={profile.categoryId}
                 onChange={(e) => setProfile({ ...profile, categoryId: e.target.value })}
@@ -162,24 +164,30 @@ export default function EntrepreneurDashboard() {
               </select>
             </div>
             <div className="mb-2">
-              <label className="form-label">Bio / Skills</label>
+              <label htmlFor="profile-bio" className="form-label">Bio / Skills</label>
               <textarea
+                id="profile-bio"
+                name="bio"
                 className="form-control"
                 value={profile.bio || ""}
                 onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
               />
             </div>
             <div className="mb-2">
-              <label className="form-label">Location</label>
+              <label htmlFor="profile-location" className="form-label">Location</label>
               <input
+                id="profile-location"
+                name="location"
                 className="form-control"
                 value={profile.location || ""}
                 onChange={(e) => setProfile({ ...profile, location: e.target.value })}
               />
             </div>
             <div className="mb-2">
-              <label className="form-label">Price Range</label>
+              <label htmlFor="profile-price-range" className="form-label">Price Range</label>
               <input
+                id="profile-price-range"
+                name="priceRange"
                 className="form-control"
                 placeholder="e.g. ₹200 - ₹1000"
                 value={profile.priceRange || ""}
@@ -188,12 +196,14 @@ export default function EntrepreneurDashboard() {
             </div>
             <div className="form-check mb-3">
               <input
+                id="profile-available"
+                name="isAvailable"
                 type="checkbox"
                 className="form-check-input"
                 checked={profile.isAvailable}
                 onChange={(e) => setProfile({ ...profile, isAvailable: e.target.checked })}
               />
-              <label className="form-check-label fw-bold">Available for new service requests</label>
+              <label htmlFor="profile-available" className="form-check-label fw-bold">Available for new service requests</label>
             </div>
             <button type="submit" className="btn btn-primary">Save Profile</button>
           </form>
@@ -257,6 +267,8 @@ export default function EntrepreneurDashboard() {
               <div className="row g-2 mb-2">
                 <div className="col-md-3">
                   <input
+                    id="edit-product-name"
+                    name="name"
                     className="form-control form-control-sm"
                     placeholder="Name"
                     required
@@ -266,6 +278,8 @@ export default function EntrepreneurDashboard() {
                 </div>
                 <div className="col-md-4">
                   <input
+                    id="edit-product-description"
+                    name="description"
                     className="form-control form-control-sm"
                     placeholder="Description"
                     value={editingProduct.description || ""}
@@ -274,6 +288,8 @@ export default function EntrepreneurDashboard() {
                 </div>
                 <div className="col-md-2">
                   <input
+                    id="edit-product-price"
+                    name="price"
                     className="form-control form-control-sm"
                     type="number"
                     placeholder="Price"
@@ -284,6 +300,8 @@ export default function EntrepreneurDashboard() {
                 </div>
                 <div className="col-md-2">
                   <input
+                    id="edit-product-image"
+                    name="imageUrl"
                     className="form-control form-control-sm"
                     placeholder="Image URL"
                     value={editingProduct.imageUrl || ""}
@@ -303,6 +321,8 @@ export default function EntrepreneurDashboard() {
             <div className="row g-2">
               <div className="col-md-3">
                 <input
+                  id="new-product-name"
+                  name="name"
                   className="form-control"
                   placeholder="Product name"
                   required
@@ -312,6 +332,8 @@ export default function EntrepreneurDashboard() {
               </div>
               <div className="col-md-4">
                 <input
+                  id="new-product-description"
+                  name="description"
                   className="form-control"
                   placeholder="Description"
                   value={newProduct.description}
@@ -320,6 +342,8 @@ export default function EntrepreneurDashboard() {
               </div>
               <div className="col-md-2">
                 <input
+                  id="new-product-price"
+                  name="price"
                   className="form-control"
                   type="number"
                   placeholder="Price"
@@ -331,6 +355,8 @@ export default function EntrepreneurDashboard() {
               </div>
               <div className="col-md-2">
                 <input
+                  id="new-product-image"
+                  name="imageUrl"
                   className="form-control"
                   placeholder="Image URL"
                   value={newProduct.imageUrl}

@@ -26,6 +26,8 @@ export default function EntrepreneurList() {
       <div className="row mb-3 g-2">
         <div className="col-md-4">
           <input
+            id="entrepreneur-search"
+            name="search"
             className="form-control"
             placeholder="Search by name or skill"
             value={filters.search}
@@ -34,6 +36,8 @@ export default function EntrepreneurList() {
         </div>
         <div className="col-md-4">
           <select
+            id="entrepreneur-category"
+            name="category"
             className="form-select"
             value={filters.category}
             onChange={(e) => setFilters({ ...filters, category: e.target.value })}
@@ -46,6 +50,8 @@ export default function EntrepreneurList() {
         </div>
         <div className="col-md-4">
           <input
+            id="entrepreneur-location"
+            name="location"
             className="form-control"
             placeholder="Filter by location"
             value={filters.location}
