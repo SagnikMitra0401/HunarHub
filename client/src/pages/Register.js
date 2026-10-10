@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/client";
 
@@ -42,8 +42,10 @@ export default function Register() {
       {error && <div className="alert alert-danger">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label className="form-label">I am a</label>
+          <label htmlFor="register-role" className="form-label">I am a</label>
           <select
+            id="register-role"
+            name="role"
             className="form-select"
             value={form.role}
             onChange={(e) => setForm({ ...form, role: e.target.value })}
@@ -53,8 +55,10 @@ export default function Register() {
           </select>
         </div>
         <div className="mb-3">
-          <label className="form-label">Name</label>
+          <label htmlFor="register-name" className="form-label">Name</label>
           <input
+            id="register-name"
+            name="name"
             className="form-control"
             required
             value={form.name}
@@ -62,8 +66,10 @@ export default function Register() {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">Email</label>
+          <label htmlFor="register-email" className="form-label">Email</label>
           <input
+            id="register-email"
+            name="email"
             type="email"
             className="form-control"
             required
@@ -72,8 +78,10 @@ export default function Register() {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">Password</label>
+          <label htmlFor="register-password" className="form-label">Password</label>
           <input
+            id="register-password"
+            name="password"
             type="password"
             className="form-control"
             required
@@ -82,16 +90,20 @@ export default function Register() {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">Phone</label>
+          <label htmlFor="register-phone" className="form-label">Phone</label>
           <input
+            id="register-phone"
+            name="phone"
             className="form-control"
             value={form.phone}
             onChange={(e) => setForm({ ...form, phone: e.target.value })}
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">Location</label>
+          <label htmlFor="register-location" className="form-label">Location</label>
           <input
+            id="register-location"
+            name="location"
             className="form-control"
             value={form.location}
             onChange={(e) => setForm({ ...form, location: e.target.value })}
@@ -101,8 +113,10 @@ export default function Register() {
         {form.role === "ENTREPRENEUR" && (
           <>
             <div className="mb-3">
-              <label className="form-label">Skill Category</label>
+              <label htmlFor="register-category" className="form-label">Skill Category</label>
               <select
+                id="register-category"
+                name="categoryId"
                 className="form-select"
                 required
                 value={form.categoryId}
@@ -115,16 +129,20 @@ export default function Register() {
               </select>
             </div>
             <div className="mb-3">
-              <label className="form-label">Skills & Experience (bio)</label>
+              <label htmlFor="register-bio" className="form-label">Skills & Experience (bio)</label>
               <textarea
+                id="register-bio"
+                name="bio"
                 className="form-control"
                 value={form.bio}
                 onChange={(e) => setForm({ ...form, bio: e.target.value })}
               />
             </div>
             <div className="mb-3">
-              <label className="form-label">Price Range</label>
+              <label htmlFor="register-price-range" className="form-label">Price Range</label>
               <input
+                id="register-price-range"
+                name="priceRange"
                 className="form-control"
                 placeholder="e.g. ₹200 - ₹1000"
                 value={form.priceRange}
@@ -134,7 +152,13 @@ export default function Register() {
           </>
         )}
 
-        <button type="submit" className="btn btn-primary">Register</button>
+        <button type="submit" className="btn btn-primary w-100">Register</button>
+
+        <p className="text-muted small text-center mt-3">
+          By registering, you agree to our{" "}
+          <Link to="/terms" className="text-decoration-underline text-muted">Terms of Use</Link> and{" "}
+          <Link to="/privacy" className="text-decoration-underline text-muted">Privacy Policy</Link>.
+        </p>
       </form>
     </div>
   );

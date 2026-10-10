@@ -27,8 +27,10 @@ export default function Login() {
       {error && <div className="alert alert-danger">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label className="form-label">Email</label>
+          <label htmlFor="login-email" className="form-label">Email</label>
           <input
+            id="login-email"
+            name="email"
             type="email"
             className="form-control"
             required
@@ -37,8 +39,10 @@ export default function Login() {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">Password</label>
+          <label htmlFor="login-password" className="form-label">Password</label>
           <input
+            id="login-password"
+            name="password"
             type="password"
             className="form-control"
             required
@@ -46,7 +50,7 @@ export default function Login() {
             onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
         </div>
-        <button type="submit" className="btn btn-primary">Login</button>
+        <button type="submit" className="btn btn-primary w-100">Login</button>
       </form>
     </div>
   );
