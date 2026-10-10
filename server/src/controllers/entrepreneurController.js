@@ -91,24 +91,26 @@ async function updateMyProfile(req, res) {
 
 async function getEarnings(req, res) {
   try {
-    const entrepreneur = await prisma.entrepreneur.findUnique({ where: { userId: req.user.id } });
-    if (!entrepreneur) return res.status(404).json({ error: "Entrepreneur profile not found." });
-
-    const [orders, serviceRequests] = await Promise.all([
+    // Fetch both in parallel — no pre-fetch needed since we can filter by userId
+    const [orders, serviceRequestCount] = await Promise.all([
       prisma.order.findMany({
-        where: { status: "COMPLETED", product: { entrepreneurId: entrepreneur.id } },
+        where: {
+          status: "COMPLETED",
+          product: { entrepreneur: { userId: req.user.id } },
+        },
+        select: { totalPrice: true },
       }),
       prisma.serviceRequest.count({
-        where: { entrepreneurId: entrepreneur.id, status: "COMPLETED" },
+        where: { entrepreneur: { userId: req.user.id }, status: "COMPLETED" },
       }),
     ]);
 
-    const productEarnings = orders.reduce((sum, o) => sum + Number(o.totalPrice), 0);
+    const totalEarnings = orders.reduce((sum, o) => sum + Number(o.totalPrice), 0);
 
     res.json({
-      totalEarnings: productEarnings,
+      totalEarnings,
       completedOrderCount: orders.length,
-      completedServiceCount: serviceRequests,
+      completedServiceCount: serviceRequestCount,
     });
   } catch (err) {
     console.error("getEarnings error:", err);

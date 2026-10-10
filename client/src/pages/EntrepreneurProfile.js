@@ -94,6 +94,8 @@ export default function EntrepreneurProfile() {
           <form onSubmit={handleRequest}>
             <div className="mb-2">
               <textarea
+                id="service-description"
+                name="description"
                 className="form-control"
                 required
                 placeholder="Describe what you need"

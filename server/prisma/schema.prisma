@@ -74,6 +74,10 @@ model Entrepreneur {
   products        Product[]
   serviceRequests ServiceRequest[] @relation("EntrepreneurServiceRequests")
   reviews         Review[]
+
+  @@index([isVerified])
+  @@index([categoryId])
+  @@index([createdAt])
 }
 
 model Product {
@@ -88,6 +92,9 @@ model Product {
   createdAt   DateTime @default(now())
 
   orders Order[]
+
+  @@index([entrepreneurId])
+  @@index([createdAt])
 }
 
 model ServiceRequest {
@@ -103,6 +110,10 @@ model ServiceRequest {
   createdAt   DateTime      @default(now())
 
   review Review?
+
+  @@index([customerId])
+  @@index([entrepreneurId])
+  @@index([status])
 }
 
 model Order {
@@ -119,6 +130,9 @@ model Order {
   createdAt  DateTime    @default(now())
 
   review Review?
+
+  @@index([customerId])
+  @@index([status])
 }
 
 model Review {
