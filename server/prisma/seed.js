@@ -67,14 +67,14 @@ async function main() {
       categoryName: "Artisan",
       bio: "Hand-carved wooden decorative artifacts, brass inlay boxes, and traditional wooden crafts.",
       priceRange: "₹400 - ₹4,500",
-      isVerified: false, // PENDING VERIFICATION
+      isVerified: false,
     },
     {
       user: { name: "Rajesh Sharma", email: "rajesh.spices@gmail.com", phone: "+91 9850567890", location: "Chandni Chowk, Old Delhi" },
       categoryName: "Small Vendor",
       bio: "Authentic stone-ground Indian spices, homemade pickles, and herbal tea blends.",
       priceRange: "₹100 - ₹800",
-      isVerified: false, // PENDING VERIFICATION
+      isVerified: false,
     },
   ];
 
@@ -134,7 +134,7 @@ async function main() {
     });
   }
 
-  console.log("Synthetic data seeding completed!");
+  console.log("Database seeding completed.");
 }
 
 main()

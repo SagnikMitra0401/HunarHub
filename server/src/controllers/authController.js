@@ -66,10 +66,10 @@ async function login(req, res) {
   try {
     const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
     // Use a constant-time comparison even on "not found" to prevent timing attacks
-    const dummyHash = "$2a$12$invalidhashfortimingprotection00000000000000000000000000";
+    const timingProtectionHash = "$2a$12$invalidhashfortimingprotection00000000000000000000000000";
     const valid = user
       ? await bcrypt.compare(password, user.passwordHash)
-      : await bcrypt.compare(password, dummyHash);
+      : await bcrypt.compare(password, timingProtectionHash);
 
     if (!user || !valid) {
       return res.status(401).json({ error: "Incorrect email or password." });

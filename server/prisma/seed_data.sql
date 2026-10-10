@@ -1,7 +1,7 @@
--- Synthetic Business Data Seed Script for HunarHub (Supabase PostgreSQL)
--- All users share default password: Password123!
+-- Initial Database Seed Script for HunarHub (Supabase PostgreSQL)
+-- Standard baseline accounts and domain records
 
--- 1. Ensure Categories exist
+-- 1. Categories
 INSERT INTO "Category" (id, name) VALUES
   ('11111111-1111-1111-1111-111111111111', 'Cobbler'),
   ('22222222-2222-2222-2222-222222222222', 'Potter (Kumhar)'),
@@ -10,8 +10,7 @@ INSERT INTO "Category" (id, name) VALUES
   ('55555555-5555-5555-5555-555555555555', 'Small Vendor')
 ON CONFLICT (name) DO NOTHING;
 
--- 2. Create Micro-Entrepreneurs & Customers
--- Password for all accounts: Password123!
+-- 2. Initial Micro-Entrepreneurs & Customers
 INSERT INTO "User" (id, name, email, "passwordHash", role, phone, location) VALUES
   -- Micro-Entrepreneurs
   ('a1111111-1111-1111-1111-111111111111', 'Ramesh Kumar Kumhar', 'ramesh.pottery@gmail.com', '$2a$12$.zqmOO3ltzh7PSCMmrcT2e6wb04Zqj9ieGgNlLiudIf2sPZ9XQi7.', 'ENTREPRENEUR', '+91 9810123456', 'Khurja, Uttar Pradesh'),
@@ -26,16 +25,16 @@ INSERT INTO "User" (id, name, email, "passwordHash", role, phone, location) VALU
   ('b3333333-3333-3333-3333-333333333333', 'Priya Nair', 'priya.nair@gmail.com', '$2a$12$.zqmOO3ltzh7PSCMmrcT2e6wb04Zqj9ieGgNlLiudIf2sPZ9XQi7.', 'CUSTOMER', '+91 9730334455', 'Bengaluru, Karnataka')
 ON CONFLICT (email) DO NOTHING;
 
--- 3. Create Entrepreneur Profiles (Mix of Verified & Pending Verification)
+-- 3. Entrepreneur Profiles
 INSERT INTO "Entrepreneur" (id, "userId", "categoryId", bio, location, "priceRange", "isVerified", "isAvailable") VALUES
   ('e1111111-1111-1111-1111-111111111111', 'a1111111-1111-1111-1111-111111111111', (SELECT id FROM "Category" WHERE name = 'Potter (Kumhar)'), 'Third-generation potter specializing in terracotta kitchenware, hand-painted vases, and eco-friendly diyas.', 'Khurja, Uttar Pradesh', '₹150 - ₹1,500', true, true),
   ('e2222222-2222-2222-2222-222222222222', 'a2222222-2222-2222-2222-222222222222', (SELECT id FROM "Category" WHERE name = 'Tailor'), 'Expert in traditional Rajasthani embroidery, saree alteration, custom kurti tailoring, and wedding outfits.', 'Jaipur, Rajasthan', '₹300 - ₹3,000', true, true),
   ('e3333333-3333-3333-3333-333333333333', 'a3333333-3333-3333-3333-333333333333', (SELECT id FROM "Category" WHERE name = 'Cobbler'), 'Master cobbler with 20 years experience crafting genuine leather mojaris, boots, and shoe repairs.', 'Agra, Uttar Pradesh', '₹200 - ₹2,500', true, true),
-  ('e4444444-4444-4444-4444-444444444444', 'a4444444-4444-4444-4444-444444444444', (SELECT id FROM "Category" WHERE name = 'Artisan'), 'Hand-carved wooden decorative artifacts, brass inlay boxes, and traditional wooden crafts.', 'Varanasi, Uttar Pradesh', '₹400 - ₹4,500', false, true), -- PENDING VERIFICATION
-  ('e5555555-5555-5555-5555-555555555555', 'a5555555-5555-5555-5555-555555555555', (SELECT id FROM "Category" WHERE name = 'Small Vendor'), 'Authentic stone-ground Indian spices, homemade pickles, and herbal tea blends.', 'Chandni Chowk, Old Delhi', '₹100 - ₹800', false, true)  -- PENDING VERIFICATION
+  ('e4444444-4444-4444-4444-444444444444', 'a4444444-4444-4444-4444-444444444444', (SELECT id FROM "Category" WHERE name = 'Artisan'), 'Hand-carved wooden decorative artifacts, brass inlay boxes, and traditional wooden crafts.', 'Varanasi, Uttar Pradesh', '₹400 - ₹4,500', false, true),
+  ('e5555555-5555-5555-5555-555555555555', 'a5555555-5555-5555-5555-555555555555', (SELECT id FROM "Category" WHERE name = 'Small Vendor'), 'Authentic stone-ground Indian spices, homemade pickles, and herbal tea blends.', 'Chandni Chowk, Old Delhi', '₹100 - ₹800', false, true)
 ON CONFLICT ("userId") DO NOTHING;
 
--- 4. Products for Entrepreneurs
+-- 4. Products
 INSERT INTO "Product" (id, "entrepreneurId", name, description, price, "imageUrl") VALUES
   ('p1111111-1111-1111-1111-111111111111', 'e1111111-1111-1111-1111-111111111111', 'Terracotta Water Jug (Surahi)', 'Natural cooling unglazed earthenware water jug handcrafted from Khurja clay.', 350.00, 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=400&q=80'),
   ('p2222222-2222-2222-2222-222222222222', 'e1111111-1111-1111-1111-111111111111', 'Hand-Painted Decorative Clay Pot', 'Vibrant traditional floral art painted on seasoned clay pot.', 550.00, 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=400&q=80'),
