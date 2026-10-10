@@ -15,6 +15,11 @@ const adminRoutes = require("./routes/admin");
 
 const app = express();
 
+// Trust the first proxy hop (required on Render, Heroku, and similar platforms
+// that route traffic through a reverse proxy; without this, express-rate-limit
+// throws ERR_ERL_UNEXPECTED_X_FORWARDED_FOR on every request)
+app.set("trust proxy", 1);
+
 // Security headers
 app.use(helmet());
 
