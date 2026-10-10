@@ -37,4 +37,6 @@ function invalidate(urlPrefix) {
   }
 }
 
-export default { get, set, isStale, invalidate };
+const apiCache = { get, set, isStale, invalidate };
+
+export default apiCache;
