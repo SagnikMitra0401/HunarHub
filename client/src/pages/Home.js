@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import api from "../api/client";
+import useCachedApi from "../hooks/useCachedApi";
 
 export default function Home() {
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    api.get("/categories").then((res) => setCategories(res.data)).catch(() => {});
-  }, []);
+  // Categories are fetched once and shared with EntrepreneurList from the same cache entry
+  const { data: categories = [] } = useCachedApi("/categories");
 
   return (
     <div className="container my-4">
@@ -28,7 +25,7 @@ export default function Home() {
       </div>
 
       <div className="my-5">
-        <h4 className="fw-bold mb-3 text-center">Browse by Skill & Category</h4>
+        <h4 className="fw-bold mb-3 text-center">Browse by Skill &amp; Category</h4>
         <div className="d-flex flex-wrap justify-content-center gap-2">
           {categories.map((c) => (
             <Link key={c.id} to={`/entrepreneurs?category=${encodeURIComponent(c.name)}`} className="category-pill">

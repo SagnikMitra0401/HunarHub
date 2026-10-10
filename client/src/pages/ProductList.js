@@ -1,25 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useMemo } from "react";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
+import useCachedApi from "../hooks/useCachedApi";
 
 export default function ProductList() {
   const { user } = useAuth();
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [filters, setFilters] = useState({ category: "", minPrice: "", maxPrice: "" });
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    api.get("/categories").then((res) => setCategories(res.data)).catch(() => {});
-  }, []);
+  const { data: categories = [] } = useCachedApi("/categories");
 
-  useEffect(() => {
-    const params = {};
-    if (filters.category) params.category = filters.category;
-    if (filters.minPrice) params.minPrice = filters.minPrice;
-    if (filters.maxPrice) params.maxPrice = filters.maxPrice;
-    api.get("/products", { params }).then((res) => setProducts(res.data)).catch(() => {});
-  }, [filters]);
+  const params = useMemo(() => {
+    const p = {};
+    if (filters.category) p.category = filters.category;
+    if (filters.minPrice) p.minPrice = filters.minPrice;
+    if (filters.maxPrice) p.maxPrice = filters.maxPrice;
+    return p;
+  }, [filters.category, filters.minPrice, filters.maxPrice]);
+
+  const { data: products = [], loading } = useCachedApi("/products", params);
 
   async function handleBuy(productId) {
     setMessage("");
@@ -76,6 +75,10 @@ export default function ProductList() {
 
       {message && <div className="alert alert-info">{message}</div>}
 
+      {loading && products.length === 0 && (
+        <p className="text-muted">Loading products...</p>
+      )}
+
       <div className="row">
         {products.map((p) => (
           <div className="col-md-4 mb-3" key={p.id}>
@@ -103,7 +106,9 @@ export default function ProductList() {
             </div>
           </div>
         ))}
-        {products.length === 0 && <p className="text-muted">No products found.</p>}
+        {!loading && products.length === 0 && (
+          <p className="text-muted">No products found.</p>
+        )}
       </div>
     </div>
   );

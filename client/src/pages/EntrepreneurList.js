@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import api from "../api/client";
+import useCachedApi from "../hooks/useCachedApi";
 
 export default function EntrepreneurList() {
-  const [entrepreneurs, setEntrepreneurs] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [filters, setFilters] = useState({ category: "", location: "", search: "" });
 
-  useEffect(() => {
-    api.get("/categories").then((res) => setCategories(res.data)).catch(() => {});
-  }, []);
+  // Categories are static — cache hit after first visit is near-instant
+  const { data: categories = [] } = useCachedApi("/categories");
 
-  useEffect(() => {
-    const params = {};
-    if (filters.category) params.category = filters.category;
-    if (filters.location) params.location = filters.location;
-    if (filters.search) params.search = filters.search;
-    api.get("/entrepreneurs", { params }).then((res) => setEntrepreneurs(res.data)).catch(() => {});
-  }, [filters]);
+  // Build params only from non-empty filters to keep the cache key stable
+  const params = useMemo(() => {
+    const p = {};
+    if (filters.category) p.category = filters.category;
+    if (filters.location) p.location = filters.location;
+    if (filters.search) p.search = filters.search;
+    return p;
+  }, [filters.category, filters.location, filters.search]);
+
+  const { data: entrepreneurs = [], loading } = useCachedApi("/entrepreneurs", params);
 
   return (
     <div className="container">
@@ -60,6 +60,10 @@ export default function EntrepreneurList() {
         </div>
       </div>
 
+      {loading && entrepreneurs.length === 0 && (
+        <p className="text-muted">Loading entrepreneurs...</p>
+      )}
+
       <div className="row">
         {entrepreneurs.map((e) => (
           <div className="col-md-4 mb-3" key={e.id}>
@@ -76,7 +80,9 @@ export default function EntrepreneurList() {
             </div>
           </div>
         ))}
-        {entrepreneurs.length === 0 && <p className="text-muted">No entrepreneurs found.</p>}
+        {!loading && entrepreneurs.length === 0 && (
+          <p className="text-muted">No entrepreneurs found.</p>
+        )}
       </div>
     </div>
   );
