@@ -1,0 +1,141 @@
+// HunarHub - Prisma schema (PostgreSQL / Supabase)
+// Assumption: a single "Category" table backs the fixed skill types
+// (Cobbler, Potter/Kumhar, Tailor, Artisan, Small Vendor) - no extra fields
+// beyond what Section 5 requires.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ENTREPRENEUR
+  ADMIN
+}
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  COMPLETED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(CUSTOMER)
+  phone        String?
+  location     String?
+  createdAt    DateTime @default(now())
+
+  entrepreneur    Entrepreneur?
+  serviceRequests ServiceRequest[] @relation("CustomerServiceRequests")
+  orders          Order[]
+  reviews         Review[]
+}
+
+model Category {
+  id   String @id @default(uuid())
+  name String @unique // Cobbler, Potter (Kumhar), Tailor, Artisan, Small Vendor
+
+  entrepreneurs Entrepreneur[]
+}
+
+model Entrepreneur {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+
+  bio         String?  // skills & experience
+  location    String?
+  priceRange  String?  // simple text e.g. "₹200 - ₹1000"
+  isVerified  Boolean  @default(false) // admin approval
+  isAvailable Boolean  @default(true)  // manage availability
+  createdAt   DateTime @default(now())
+
+  products        Product[]
+  serviceRequests ServiceRequest[] @relation("EntrepreneurServiceRequests")
+  reviews         Review[]
+}
+
+model Product {
+  id             String   @id @default(uuid())
+  entrepreneurId String
+  entrepreneur   Entrepreneur @relation(fields: [entrepreneurId], references: [id], onDelete: Cascade)
+
+  name        String
+  description String?
+  price       Decimal  @db.Decimal(10, 2)
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+
+  orders Order[]
+}
+
+model ServiceRequest {
+  id             String        @id @default(uuid())
+  customerId     String
+  customer       User          @relation("CustomerServiceRequests", fields: [customerId], references: [id])
+
+  entrepreneurId String
+  entrepreneur   Entrepreneur  @relation("EntrepreneurServiceRequests", fields: [entrepreneurId], references: [id])
+
+  description String
+  status      RequestStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
+
+  review Review?
+}
+
+model Order {
+  id         String      @id @default(uuid())
+  customerId String
+  customer   User        @relation(fields: [customerId], references: [id])
+
+  productId  String
+  product    Product     @relation(fields: [productId], references: [id])
+
+  quantity   Int         @default(1)
+  totalPrice Decimal     @db.Decimal(10, 2)
+  status     OrderStatus @default(PENDING)
+  createdAt  DateTime    @default(now())
+
+  review Review?
+}
+
+model Review {
+  id             String   @id @default(uuid())
+  customerId     String
+  customer       User     @relation(fields: [customerId], references: [id])
+
+  entrepreneurId String
+  entrepreneur   Entrepreneur @relation(fields: [entrepreneurId], references: [id])
+
+  orderId          String?         @unique
+  order            Order?          @relation(fields: [orderId], references: [id])
+
+  serviceRequestId String?         @unique
+  serviceRequest   ServiceRequest? @relation(fields: [serviceRequestId], references: [id])
+
+  rating    Int      // 1-5
+  comment   String?
+  createdAt DateTime @default(now())
+}
