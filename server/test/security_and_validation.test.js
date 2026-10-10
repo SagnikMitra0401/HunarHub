@@ -32,6 +32,8 @@ console.log("==========================================");
 // 1. UUID Validation
 test("isValidUUID correctly identifies valid and invalid UUIDs", () => {
   assert.strictEqual(isValidUUID("123e4567-e89b-12d3-a456-426614174000"), true);
+  assert.strictEqual(isValidUUID("p1111111-1111-1111-1111-111111111111"), true);
+  assert.strictEqual(isValidUUID("sr111111-1111-1111-1111-111111111111"), true);
   assert.strictEqual(isValidUUID("invalid-uuid"), false);
   assert.strictEqual(isValidUUID("123e4567e89b12d3a456426614174000"), false);
 });
