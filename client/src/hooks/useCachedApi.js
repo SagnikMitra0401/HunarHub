@@ -13,7 +13,7 @@ const inflight = new Map(); // url+params → Promise
 export default function useCachedApi(url, params = {}) {
   const cached = cache.get(url, params);
 
-  const [data, setData] = useState(cached ? cached.data : null);
+  const [data, setData] = useState(cached ? cached.data : undefined);
   const [loading, setLoading] = useState(!cached);
   const [error, setError] = useState(null);
 
